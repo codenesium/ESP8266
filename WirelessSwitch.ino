@@ -60,11 +60,10 @@ void setup() {
 
 void loop() {
 
-   if (WiFi.status() != WL_CONNECTED) {
+   while (WiFi.status() != WL_CONNECTED) {
       delay(500);
       blink(3,250);
       Serial.print("wifi disconnected...");
-      return;
     }
     
   // Check if a client has connected
