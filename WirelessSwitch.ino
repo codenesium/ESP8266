@@ -10,8 +10,8 @@
 #include <ESP8266WiFi.h>
 
 const char* DEVICE_NAME = "ESP8266-01";
-const char* ssid = "Lyncsis";
-const char* password = "xxxxxxxxxxxxx";
+const char* WIFI_SSID = "Lyncsis";
+const char* WIFI_PASSWORD = "xxxxxxxxxxxxx";
 const int LED_PIN = 2;
 const int GPIO_PIN_0 = 0;
 
@@ -25,21 +25,21 @@ void setup() {
   Serial.begin(115200);
   delay(10);
 
-  // prepare GPIO2
-  pinMode(LED_PIN, OUTPUT);
-  digitalWrite(LED_PIN, 1);
-
+  // setup GPIO and LED
   pinMode(GPIO_PIN_0, OUTPUT);
+  pinMode(LED_PIN, OUTPUT);
   digitalWrite(GPIO_PIN_0, 1);
-  
+
+  // blink the LED so we know it's working
+  blink(5,250);
   
   // Connect to WiFi network
   Serial.println();
   Serial.println();
   Serial.print("Connecting to ");
-  Serial.println(ssid);
+  Serial.println(WIFI_SSID);
   
-  WiFi.begin(ssid, password);
+  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
   
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
@@ -59,6 +59,14 @@ void setup() {
 }
 
 void loop() {
+
+   if (WiFi.status() != WL_CONNECTED) {
+      delay(500);
+      blink(3,250);
+      Serial.print("wifi disconnected...");
+      return;
+    }
+    
   // Check if a client has connected
   WiFiClient client = server.available();
   if (!client) {
@@ -103,8 +111,19 @@ void loop() {
   // Send the response to the client
   client.print(s);
   delay(1);
-  Serial.println("Client disonnected");
+  Serial.println("Client disconnected");
 
   // The client will actually be disconnected 
   // when the function returns and 'client' object is detroyed
+}
+
+void blink(int count, int durationInMS)
+{
+  for(int i=0; i < count;i++)
+  {
+    digitalWrite(LED_PIN, 0);
+    delay(durationInMS);
+    digitalWrite(LED_PIN, 1);
+    delay(durationInMS);
+  }
 }
