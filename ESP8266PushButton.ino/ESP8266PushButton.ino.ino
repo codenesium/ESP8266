@@ -20,7 +20,7 @@ int BUTTON = 2;
 const char* WIFI_CONFIG_SSID  = "Hogwarts";
 const char* WIFI_CONFIG_PASSWORD  = "xxxxxxxxxxxxx";
 const char* HOST = "192.168.0.95";
-const char* DEVICE_ID = "ESP8266-01"
+const char* DEVICE_ID = "ESP8266-01";
 const int PORT = 8080;
 const int BLINK_DURATION_STATUS = 100;
 const int BLINK_DURATION_ERROR = 1000;
@@ -110,7 +110,7 @@ void connectWifi(const char* ssid, const char* password) {
 }
 
 String sendRequest(String host, int port) {
-  String url = "/deviceId=" + DEVICE_ID + "&action=button_pressed";
+  String url = "/deviceId=" + String(DEVICE_ID) + "&action=button_pressed";
   String request = String("GET ") + url + " HTTP/1.1\r\n" +
                "Host: " + HOST + "\r\n" +
                "Connection: close\r\n\r\n";
